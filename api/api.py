@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 
@@ -13,17 +13,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. File upload endpoint
+# upload file endpoint
 @app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    # The variable name 'file' matches formData.append('file', file) in Next.js
-    destination_path = f"./uploads/{file.filename}"
-    
-    with open(destination_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-        
-    return {
-        "status": "success",
-        "filename": file.filename,
-        "content_type": file.content_type
-    }
+async def upload_pdf(pdfFile: UploadFile = File(...)):
+    try:
+        # contents = await pdfFile.read()
+
+        destination_path = f"./uploads/{pdfFile.filename}"
+
+        with open(destination_path, "wb") as buffer:
+            shutil.copyfileobj(pdfFile.file, buffer)
+
+        return {
+            "status": "success",
+            "filename": pdfFile.filename,
+            "size_bytes": len(contents)
+        }
+    except Exception as e:
+        print(f"Erro ao processar arquivo: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

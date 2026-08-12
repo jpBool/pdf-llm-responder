@@ -31,21 +31,20 @@ export default function PdfUploader() {
       const formData = new FormData();
       formData.append("pdfFile", file);
 
-      const response = await fetch(`http://12y7.0.0.1:8000`,
+      const response = await fetch(`http://127.0.0.1:8000/upload`,
         {
           method: 'POST',
-          file: formD
+          body: formData
         }
-      )
+      );
 
-      // example (Next.js Route Handler)
-      // const response = await fetch('/api/upload', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
+      if(response.ok){
+        const res = await response.json();
+        console.log(res);
+      }
 
       // Simulating upload time
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       
       alert(`The file ${file.name} was imported successfully!`);
       setFile(null); 
