@@ -31,6 +31,13 @@ export default function PdfUploader() {
       const formData = new FormData();
       formData.append("pdfFile", file);
 
+      const response = await fetch(`http://12y7.0.0.1:8000`,
+        {
+          method: 'POST',
+          file: formD
+        }
+      )
+
       // example (Next.js Route Handler)
       // const response = await fetch('/api/upload', {
       //   method: 'POST',
